@@ -4,7 +4,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
-import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS } from '../libs/constant';
+import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG } from '../libs/constant';
 
 import('colors');
 
@@ -63,7 +63,7 @@ class TsKit extends ActionBase {
 
     // tsconfig
     if (!existsSync(`${root}/tsconfig.json`)) {
-      writeFileSync(`${root}/tsconfig.json`, ESLINTRC);
+      writeFileSync(`${root}/tsconfig.json`, TSCONFIG);
       this.info(`Successful generate: ${'tsconfig.json'.white}`);
     }
 
