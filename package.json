@@ -1,0 +1,35 @@
+{
+  "name": "@mohism/ts-kit",
+  "version": "1.0.0",
+  "description": "an awesome typescript kit",
+  "main": "dist/commands/tskit.action.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "echo \"run 'sudo npm link' and 'ts-suit -h'\"",
+    "build": "npx eslint src/**/*.ts --fix && npx tsc",
+    "lint": "npx eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "mohism",
+    "typescript",
+    "kit"
+  ],
+  "author": "lanhao",
+  "license": "ISC",
+  "dependencies": {
+    "@mohism/cli-wrapper": "^1.2.3",
+    "shelljs": "^0.8.3"
+  },
+  "bin": {
+    "ts-suit": "dist/bin/index.js"
+  },
+  "mohismInit": true,
+  "devDependencies": {
+    "@types/node": "^12.11.7",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
+    "eslint": "^6.5.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
+  }
+}
