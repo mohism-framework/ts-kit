@@ -36,7 +36,7 @@ class TsKit extends ActionBase {
 
     // install deps
     const toInstall = DEPS_DEV
-      .filter(item => !pkg.devDependencies[item])
+      .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
       .join(' ');
     if (0 !== exec(`npm i -D ${toInstall}`, { silent: true }).code) {
       this.fatal('Dependencies fail to installed');
