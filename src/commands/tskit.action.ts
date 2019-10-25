@@ -1,6 +1,6 @@
 import ActionBase from '@mohism/cli-wrapper/dist/libs/action.class';
 import { ArgvOption, Dict } from '@mohism/cli-wrapper/dist/libs/utils/type';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
@@ -26,22 +26,21 @@ class TsKit extends ActionBase {
       }).code) {
         this.fatal('Run "npm init" failed.');
       }
-      this.info(`Successful generate: ${`${root}/package.json`.blue}`);
+      this.info(`Successful generate: ${`${root}/package.json`.white}`);
     }
     const pkg = require(`${root}/package.json`);
     // add npm scripts
     pkg.scripts = { ...pkg.scripts, ...SCRIPTS };
     writeFileSync(`${root}/package.json`, JSON.stringify(pkg, null, 2));
-    this.info(`Successful update scripts: ${'npm run build, npm run lint'.blue}`);
+    this.info(`Successful update scripts: ${'npm run build, npm run lint'.white}`);
 
-    // install deps
-    const toInstall = DEPS_DEV
-      .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
-      .join(' ');
-    if (0 !== exec(`npm i -D ${toInstall}`, { silent: true }).code) {
-      this.fatal('Dependencies fail to installed');
+    // mkdir
+    if (!existsSync(`${root}/src`)) {
+      mkdirSync(`${root}/src`);
     }
-    this.info(`Successful install: ${toInstall.blue}`);
+    if (!existsSync(`${root}/dist`)) {
+      mkdirSync(`${root}/dist`);
+    }
 
     // ignore file
     Object.keys(IGNORE_FILES).forEach(file => {
@@ -53,20 +52,32 @@ class TsKit extends ActionBase {
         ]);
       }
       writeFileSync(`${root}/${file}`, Array.from(ignore).join(EOL));
-      this.info(`Successful updated: ${`${root}/${file}`.blue}`);
+      this.info(`Successful updated: ${`${file}`.white}`);
     });
 
     // eslintrc
     if (!existsSync(`${root}/.eslintrc.json`)) {
       writeFileSync(`${root}/.eslintrc.json`, ESLINTRC);
-      this.info(`Successful generate: ${`${root}/.eslintrc.json`.blue}`);
+      this.info(`Successful generate: ${'.eslintrc.json'.white}`);
     }
 
     // tsconfig
     if (!existsSync(`${root}/tsconfig.json`)) {
       writeFileSync(`${root}/tsconfig.json`, ESLINTRC);
-      this.info(`Successful generate: ${`${root}/tsconfig.json`.blue}`);
+      this.info(`Successful generate: ${'tsconfig.json'.white}`);
     }
+
+    // install deps
+    const toInstall = DEPS_DEV
+      .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
+      .join(' ');
+    if (toInstall.length > 0) {
+      this.info('wait for install dependencies ...'.white);
+      if (0 !== exec(`npm i -D ${toInstall}`, { silent: true }).code) {
+        this.fatal('Dependencies fail to installed');
+      }
+    }
+    this.info(`Successful install: ${toInstall.white}`);
   }
 }
 
