@@ -8,7 +8,14 @@ export const DEPS_DEV: Array<string> = [
   '@typescript-eslint/parser',
   'eslint',
   'ts-node',
-  'typescript'
+  'typescript',
+  'nodemon'
+];
+
+export const DEPS_TEST: Array<string> = [
+  'mocha',
+  'nyc',
+  'chai',
 ];
 
 export const SCRIPTS: Dict<string> = {

@@ -10,7 +10,12 @@ import('colors');
 
 class TsKit extends ActionBase {
   options(): Dict<ArgvOption> {
-    return {};
+    return {
+      test: {
+        default:false,
+        desc: 'add deps [nyc] [mocha] [chai]',
+      },
+    };
   }
 
   description(): string {
