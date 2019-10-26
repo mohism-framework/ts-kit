@@ -4,7 +4,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
-import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG } from '../libs/constant';
+import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG, SCRIPTS_TEST, DEPS_TEST } from '../libs/constant';
 
 import('colors');
 
@@ -12,8 +12,8 @@ class TsKit extends ActionBase {
   options(): Dict<ArgvOption> {
     return {
       test: {
-        default:false,
-        desc: 'add deps [nyc] [mocha] [chai]',
+        default: false,
+        desc: 'add deps: nyc, mocha, chai',
       },
     };
   }
@@ -22,7 +22,11 @@ class TsKit extends ActionBase {
     return 'an awesome typescript kit';
   }
 
-  async run(): Promise<any> {
+  async run(options?: Dict<any>): Promise<any> {
+    let testKit = false;
+    if (options && options.test !== false) {
+      testKit = true;
+    }
     // 要运行kit的项目位置
     const root: string = process.cwd();
     if (!existsSync(`${root}/package.json`)) {
@@ -35,7 +39,11 @@ class TsKit extends ActionBase {
     }
     const pkg = require(`${root}/package.json`);
     // add npm scripts
-    pkg.scripts = { ...pkg.scripts, ...SCRIPTS };
+    pkg.scripts = {
+      ...pkg.scripts,
+      ...SCRIPTS,
+      ...(testKit ? SCRIPTS_TEST : [])
+    };
     writeFileSync(`${root}/package.json`, JSON.stringify(pkg, null, 2));
     this.info(`Successful update scripts: ${'npm run build, npm run lint'.white}`);
 
@@ -73,9 +81,13 @@ class TsKit extends ActionBase {
     }
 
     // install deps
-    const toInstall = DEPS_DEV
-      .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
-      .join(' ');
+    let toInstall = [
+      ...DEPS_DEV,
+      ...(testKit ? DEPS_TEST : []),
+    ]
+    .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
+    .join(' ');
+
     if (toInstall.length > 0) {
       this.info('wait for install dependencies ...'.white);
       if (0 !== exec(`npm i -D ${toInstall}`, { silent: true }).code) {

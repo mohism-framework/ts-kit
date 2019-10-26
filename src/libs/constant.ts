@@ -23,6 +23,11 @@ export const SCRIPTS: Dict<string> = {
   'lint': 'npx eslint src/**/*.ts --fix',
 };
 
+export const SCRIPTS_TEST: Dict<string> = {
+  "cover": "npx nyc mocha --require ts-node/register tests/**/*.ts",
+  "test": "npx mocha --require ts-node/register tests/**/*.ts",
+}
+
 export const GIT_IGNORE: Array<string> = [
   'node_modules',
   'dist',
