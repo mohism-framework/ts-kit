@@ -1,6 +1,6 @@
 {
   "name": "@mohism/ts-kit",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "an awesome typescript kit",
   "main": "dist/commands/tskit.action.js",
   "scripts": {
@@ -17,7 +17,8 @@
   "author": "lanhao",
   "license": "ISC",
   "dependencies": {
-    "@mohism/cli-wrapper": "^1.2.3",
+    "@mohism/cli-wrapper": "^1.2.23",
+    "@mohism/utils": "^1.0.1",
     "shelljs": "^0.8.3"
   },
   "bin": {

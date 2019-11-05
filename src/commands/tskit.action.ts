@@ -1,10 +1,11 @@
 import ActionBase from '@mohism/cli-wrapper/dist/libs/action.class';
-import { ArgvOption, Dict } from '@mohism/cli-wrapper/dist/libs/utils/type';
+import { ArgvOption } from '@mohism/cli-wrapper/dist/libs/utils/type';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
 import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG, SCRIPTS_TEST, DEPS_TEST } from '../libs/constant';
+import { Dict } from '@mohism/utils';
 
 import('colors');
 
