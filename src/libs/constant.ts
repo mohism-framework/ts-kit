@@ -14,8 +14,9 @@ export const DEPS_DEV: Array<string> = [
 
 export const DEPS_TEST: Array<string> = [
   'mocha',
-  'nyc',
+  '@types/mocha',
   'chai',
+  '@types/chai',
 ];
 
 export const SCRIPTS: Dict<string> = {
@@ -24,9 +25,8 @@ export const SCRIPTS: Dict<string> = {
 };
 
 export const SCRIPTS_TEST: Dict<string> = {
-  "cover": "npx nyc mocha --require ts-node/register tests/**/*.ts",
-  "test": "npx mocha --require ts-node/register tests/**/*.ts",
-}
+  'test': 'npx mocha --require ts-node/register **/*.spec.ts',
+};
 
 export const GIT_IGNORE: Array<string> = [
   'node_modules',

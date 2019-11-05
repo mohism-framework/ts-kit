@@ -13,7 +13,7 @@ class TsKit extends ActionBase {
     return {
       test: {
         default: false,
-        desc: 'add deps: nyc, mocha, chai',
+        desc: `add deps: ${'nyc'.yellow}, ${'mocha'.green}, ${'chai'.cyan}`,
       },
     };
   }
@@ -85,8 +85,8 @@ class TsKit extends ActionBase {
       ...DEPS_DEV,
       ...(testKit ? DEPS_TEST : []),
     ]
-    .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
-    .join(' ');
+      .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
+      .join(' ');
 
     if (toInstall.length > 0) {
       this.info('wait for install dependencies ...'.white);
