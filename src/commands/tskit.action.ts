@@ -55,7 +55,9 @@ class TsKit extends ActionBase {
     if (!existsSync(`${root}/dist`)) {
       mkdirSync(`${root}/dist`);
     }
-
+    if (!existsSync(`${root}/test`)) {
+      mkdirSync(`${root}/test`);
+    }
     // ignore file
     Object.keys(IGNORE_FILES).forEach(file => {
       let ignore: Set<string> = new Set(IGNORE_FILES[file]);

@@ -1,4 +1,4 @@
-import { Dict } from '@mohism/cli-wrapper/dist/libs/utils/type';
+import { Dict } from '@mohism/utils';
 
 export const DEPS: Array<string> = [];
 
@@ -17,6 +17,7 @@ export const DEPS_TEST: Array<string> = [
   '@types/mocha',
   'chai',
   '@types/chai',
+  'nyc',
 ];
 
 export const SCRIPTS: Dict<string> = {
@@ -25,25 +26,55 @@ export const SCRIPTS: Dict<string> = {
 };
 
 export const SCRIPTS_TEST: Dict<string> = {
-  'test': 'npx mocha --require ts-node/register **/*.spec.ts',
+  'cover': 'npx nyc npm test',
+  'test': 'npx mocha --recursive -r ts-node/register test/**/*.spec.ts',
 };
 
 export const GIT_IGNORE: Array<string> = [
   'node_modules',
   'dist',
   'tsconfig.tsbuildinfo',
+  '.nyc_output',
+  'coverage',
 ];
 
 export const NPM_IGNORE: Array<string> = [
   'src',
   'node_modules',
   'tsconfig.json',
+  '*.map',
 ];
 
 export const IGNORE_FILES: Dict<Array<string>> = {
   '.gitignore': GIT_IGNORE,
   '.npmignore': NPM_IGNORE,
 };
+
+export const NYC_RC: string =
+  `{
+  "cache": false,
+  "check-coverage": false,
+  "extension": [
+    ".ts"
+  ],
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "coverage/**",
+    "node_modules/**",
+    "**/*.d.ts",
+    "**/*.spec.ts"
+  ],
+  "sourceMap": true,
+  "reporter": [
+    "html",
+    "text",
+    "text-summary"
+  ],
+  "all": true,
+  "instrument": true
+}`;
 
 export const ESLINTRC: string =
   `{
@@ -102,7 +133,7 @@ export const TSCONFIG: string =
     // "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     "declaration": true, /* Generates corresponding '.d.ts' file. */
     // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    // "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    "sourceMap": true,                     /* Generates corresponding '.map' file. */
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     "outDir": "./dist", /* Redirect output structure to the directory. */
     "rootDir": "./src", /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
@@ -148,7 +179,7 @@ export const TSCONFIG: string =
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "**/*"
+    "src/**/*"
   ],
   "exclude": [
     "./dist",
