@@ -4,7 +4,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
-import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG, SCRIPTS_TEST, DEPS_TEST } from '../libs/constant';
+import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG, SCRIPTS_TEST, DEPS_TEST, NYC_RC } from '../libs/constant';
 import { Dict } from '@mohism/utils';
 
 import('colors');
@@ -75,6 +75,12 @@ class TsKit extends ActionBase {
     if (!existsSync(`${root}/.eslintrc.json`)) {
       writeFileSync(`${root}/.eslintrc.json`, ESLINTRC);
       this.info(`Successful generate: ${'.eslintrc.json'.white}`);
+    }
+
+    // .nycrc
+    if (!existsSync(`${root}/.nycrc`)) {
+      writeFileSync(`${root}/.nycrc`, NYC_RC);
+      this.info(`Successful generate: ${'.nycrc'.white}`);
     }
 
     // tsconfig
