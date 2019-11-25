@@ -1,6 +1,6 @@
 {
   "name": "@mohism/ts-kit",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "an awesome typescript kit",
   "main": "dist/commands/tskit.action.js",
   "scripts": {

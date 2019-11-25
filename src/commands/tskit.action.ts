@@ -6,15 +6,14 @@ import { exec } from 'shelljs';
 
 import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG, SCRIPTS_TEST, DEPS_TEST, NYC_RC } from '../libs/constant';
 import { Dict } from '@mohism/utils';
-
-import('colors');
+import { yellow, green, cyan } from 'colors';
 
 class TsKit extends ActionBase {
   options(): Dict<ArgvOption> {
     return {
       test: {
         default: false,
-        desc: `add deps: ${'nyc'.yellow}, ${'mocha'.green}, ${'chai'.cyan}`,
+        desc: `add deps: ${yellow('nyc')}, ${green('mocha')}, ${cyan('chai')}`,
       },
     };
   }
@@ -31,7 +30,7 @@ class TsKit extends ActionBase {
     // 要运行kit的项目位置
     const root: string = process.cwd();
     if (!existsSync(`${root}/package.json`)) {
-      if (0 !== exec('npm init --init', {
+      if (0 !== exec('npm init --yes', {
         silent: true,
       }).code) {
         this.fatal('Run "npm init" failed.');

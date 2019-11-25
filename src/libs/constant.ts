@@ -43,6 +43,8 @@ export const NPM_IGNORE: Array<string> = [
   'node_modules',
   'tsconfig.json',
   '*.map',
+  '.nyc_output',
+  'coverage',
 ];
 
 export const IGNORE_FILES: Dict<Array<string>> = {
