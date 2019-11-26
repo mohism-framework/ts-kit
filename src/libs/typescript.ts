@@ -6,8 +6,7 @@ import { Dict } from '@mohism/utils';
 export const DEPS_DEV: Array<string> = [
   '@types/node',
   'ts-node',
-  'typescript',
-  'nodemon'
+  'typescript'
 ];
 
 export const SCRIPTS_TS: Dict<string> = {

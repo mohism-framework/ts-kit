@@ -10,7 +10,7 @@ import { IGNORE_FILES } from '../libs/ignore';
 import { DEPS_LINT, ESLINTRC, SCRIPTS_LINT } from '../libs/lint';
 import { DEPS_TEST, NYC_RC, SCRIPTS_TEST } from '../libs/test';
 import { DEPS_DEV, SCRIPTS_TS, TSCONFIG } from '../libs/typescript';
-import { gitSetting } from '../libs/git';
+import { gitSetting, DESP_GIT } from '../libs/git';
 
 class TsKit extends ActionBase {
   options(): Dict<ArgvOption> {
@@ -22,9 +22,9 @@ class TsKit extends ActionBase {
   }
 
   async run(): Promise<any> {
-    const testKit = await this.question.confirm('安装测试套件？', false);
-    const lintKit = await this.question.confirm('安装 eslint 套件？', false);
-    const gitKit = await this.question.confirm('安装 git辅助 套件？', false);
+    const testKit = await this.question.confirm('安装测试套件？', true);
+    const lintKit = await this.question.confirm('安装 eslint 套件？', true);
+    const gitKit = await this.question.confirm('安装 git辅助 套件？', true);
     // 要运行kit的项目位置
     const root: string = process.cwd();
     if (!existsSync(`${root}/package.json`)) {
@@ -46,7 +46,7 @@ class TsKit extends ActionBase {
     if (gitKit) {
       pkg = {
         ...pkg,
-        ...gitSetting,
+        ...gitSetting(lintKit, testKit),
       };
     }
     writeFileSync(`${root}/package.json`, JSON.stringify(pkg, null, 2));
@@ -98,6 +98,7 @@ class TsKit extends ActionBase {
       ...DEPS_DEV,
       ...(testKit ? DEPS_TEST : []),
       ...(lintKit ? DEPS_LINT : []),
+      ...(gitKit ? DESP_GIT : []),
     ]
       .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
       .join(' ');
