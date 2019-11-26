@@ -6,11 +6,11 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
-import { IGNORE_FILES } from '../libs/ignore';
-import { DEPS_LINT, ESLINTRC, SCRIPTS_LINT } from '../libs/lint';
-import { DEPS_TEST, NYC_RC, SCRIPTS_TEST } from '../libs/test';
-import { DEPS_DEV, SCRIPTS_TS, TSCONFIG } from '../libs/typescript';
-import { gitSetting, DESP_GIT } from '../libs/git';
+import { IGNORE_FILES } from './libs/ignore';
+import { DEPS_LINT, ESLINTRC, SCRIPTS_LINT } from './libs/lint';
+import { DEPS_TEST, NYC_RC, SCRIPTS_TEST } from './libs/test';
+import { DEPS_DEV, SCRIPTS_TS, TSCONFIG } from './libs/typescript';
+import { gitSetting, DESP_GIT } from './libs/git';
 
 class TsKit extends ActionBase {
   options(): Dict<ArgvOption> {
