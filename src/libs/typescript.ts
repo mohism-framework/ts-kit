@@ -1,126 +1,18 @@
 import { Dict } from '@mohism/utils';
 
-export const DEPS: Array<string> = [];
-
+/**
+ * TS套件
+ */
 export const DEPS_DEV: Array<string> = [
   '@types/node',
-  '@typescript-eslint/eslint-plugin',
-  '@typescript-eslint/parser',
-  'eslint',
   'ts-node',
   'typescript',
   'nodemon'
 ];
 
-export const DEPS_TEST: Array<string> = [
-  'mocha',
-  '@types/mocha',
-  'chai',
-  '@types/chai',
-  'nyc',
-];
-
-export const SCRIPTS: Dict<string> = {
-  'build': 'npx eslint src/**/*.ts --fix && npx tsc',
-  'lint': 'npx eslint src/**/*.ts --fix',
+export const SCRIPTS_TS: Dict<string> = {
+  'build': 'npx tsc',
 };
-
-export const SCRIPTS_TEST: Dict<string> = {
-  'cover': 'npx nyc npm test',
-  'test': 'npx mocha --recursive -r ts-node/register test/**/*.spec.ts',
-};
-
-export const GIT_IGNORE: Array<string> = [
-  'node_modules',
-  'dist',
-  'tsconfig.tsbuildinfo',
-  '.nyc_output',
-  'coverage',
-];
-
-export const NPM_IGNORE: Array<string> = [
-  'src',
-  'node_modules',
-  'tsconfig.json',
-  '*.map',
-  '.nyc_output',
-  'coverage',
-];
-
-export const IGNORE_FILES: Dict<Array<string>> = {
-  '.gitignore': GIT_IGNORE,
-  '.npmignore': NPM_IGNORE,
-};
-
-export const NYC_RC: string =
-  `{
-  "cache": false,
-  "check-coverage": false,
-  "extension": [
-    ".ts"
-  ],
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "coverage/**",
-    "node_modules/**",
-    "**/*.d.ts",
-    "**/*.spec.ts"
-  ],
-  "sourceMap": true,
-  "reporter": [
-    "html",
-    "text",
-    "text-summary"
-  ],
-  "all": true,
-  "instrument": true
-}`;
-
-export const ESLINTRC: string =
-  `{
-  "env": {
-      "es6": true,
-      "node": true
-  },
-  "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended"
-  ],
-  "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
-  },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-      "ecmaVersion": 2018,
-      "sourceType": "module"
-  },
-  "plugins": [
-      "@typescript-eslint"
-  ],
-  "rules": {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "error",
-      "indent": [
-          "error",
-          2
-      ],
-      "linebreak-style": [
-          "error",
-          "unix"
-      ],
-      "quotes": [
-          "error",
-          "single"
-      ],
-      "semi": [
-          "error",
-          "always"
-      ]
-  }
-}`;
 
 export const TSCONFIG: string =
   `{
@@ -184,7 +76,6 @@ export const TSCONFIG: string =
     "src/**/*"
   ],
   "exclude": [
-    "./dist",
-    "./templates"
+    "./dist"
   ]
 }`;

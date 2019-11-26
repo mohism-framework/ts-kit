@@ -1,32 +1,30 @@
 import ActionBase from '@mohism/cli-wrapper/dist/libs/action.class';
 import { ArgvOption } from '@mohism/cli-wrapper/dist/libs/utils/type';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { Dict } from '@mohism/utils';
+import { white } from 'colors';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { EOL } from 'os';
 import { exec } from 'shelljs';
 
-import { DEPS_DEV, ESLINTRC, IGNORE_FILES, SCRIPTS, TSCONFIG, SCRIPTS_TEST, DEPS_TEST, NYC_RC } from '../libs/constant';
-import { Dict } from '@mohism/utils';
-import { yellow, green, cyan } from 'colors';
+import { IGNORE_FILES } from '../libs/ignore';
+import { DEPS_LINT, ESLINTRC, SCRIPTS_LINT } from '../libs/lint';
+import { DEPS_TEST, NYC_RC, SCRIPTS_TEST } from '../libs/test';
+import { DEPS_DEV, SCRIPTS_TS, TSCONFIG } from '../libs/typescript';
+import { gitSetting } from '../libs/git';
 
 class TsKit extends ActionBase {
   options(): Dict<ArgvOption> {
-    return {
-      test: {
-        default: false,
-        desc: `add deps: ${yellow('nyc')}, ${green('mocha')}, ${cyan('chai')}`,
-      },
-    };
+    return {};
   }
 
   description(): string {
     return 'an awesome typescript kit';
   }
 
-  async run(options?: Dict<any>): Promise<any> {
-    let testKit = false;
-    if (options && options.test !== false) {
-      testKit = true;
-    }
+  async run(): Promise<any> {
+    const testKit = await this.question.confirm('安装测试套件？', false);
+    const lintKit = await this.question.confirm('安装 eslint 套件？', false);
+    const gitKit = await this.question.confirm('安装 git辅助 套件？', false);
     // 要运行kit的项目位置
     const root: string = process.cwd();
     if (!existsSync(`${root}/package.json`)) {
@@ -35,17 +33,24 @@ class TsKit extends ActionBase {
       }).code) {
         this.fatal('Run "npm init" failed.');
       }
-      this.info(`Successful generate: ${`${root}/package.json`.white}`);
+      this.info(`Successful generate: ${white(`${root}/package.json`)}`);
     }
-    const pkg = require(`${root}/package.json`);
+    let pkg = require(`${root}/package.json`);
     // add npm scripts
     pkg.scripts = {
       ...pkg.scripts,
-      ...SCRIPTS,
-      ...(testKit ? SCRIPTS_TEST : [])
+      ...SCRIPTS_TS,
+      ...(testKit ? SCRIPTS_TEST : []),
+      ...(lintKit ? SCRIPTS_LINT : []),
     };
+    if (gitKit) {
+      pkg = {
+        ...pkg,
+        ...gitSetting,
+      };
+    }
     writeFileSync(`${root}/package.json`, JSON.stringify(pkg, null, 2));
-    this.info(`Successful update scripts: ${'npm run build, npm run lint'.white}`);
+    this.info('Successful update npm scripts');
 
     // mkdir
     if (!existsSync(`${root}/src`)) {
@@ -67,19 +72,19 @@ class TsKit extends ActionBase {
         ]);
       }
       writeFileSync(`${root}/${file}`, Array.from(ignore).join(EOL));
-      this.info(`Successful updated: ${`${file}`.white}`);
+      this.info(`Successful updated: ${white(file)}`);
     });
 
     // eslintrc
-    if (!existsSync(`${root}/.eslintrc.json`)) {
+    if (lintKit && !existsSync(`${root}/.eslintrc.json`)) {
       writeFileSync(`${root}/.eslintrc.json`, ESLINTRC);
-      this.info(`Successful generate: ${'.eslintrc.json'.white}`);
+      this.info(`Successful generate: ${white('.eslintrc.json')}`);
     }
 
     // .nycrc
-    if (!existsSync(`${root}/.nycrc`)) {
+    if (testKit && !existsSync(`${root}/.nycrc`)) {
       writeFileSync(`${root}/.nycrc`, NYC_RC);
-      this.info(`Successful generate: ${'.nycrc'.white}`);
+      this.info(`Successful generate: ${white('.nycrc')}`);
     }
 
     // tsconfig
@@ -92,6 +97,7 @@ class TsKit extends ActionBase {
     let toInstall = [
       ...DEPS_DEV,
       ...(testKit ? DEPS_TEST : []),
+      ...(lintKit ? DEPS_LINT : []),
     ]
       .filter(item => !pkg.devDependencies || !pkg.devDependencies[item])
       .join(' ');
@@ -99,7 +105,7 @@ class TsKit extends ActionBase {
     if (toInstall.length > 0) {
       this.info('wait for install dependencies ...'.white);
       if (0 !== exec(`npm i -D ${toInstall}`, { silent: true }).code) {
-        this.fatal('Dependencies fail to installed');
+        this.fatal('Dependencies fail to installed, it will finished in few mins');
       }
     }
     this.info(`Successful install: ${toInstall.white}`);
