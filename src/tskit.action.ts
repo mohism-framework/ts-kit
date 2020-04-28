@@ -1,5 +1,4 @@
-import ActionBase from '@mohism/cli-wrapper/dist/libs/action.class';
-import { ArgvOption } from '@mohism/cli-wrapper/dist/libs/utils/type';
+import { ActionBase, ArgvOption } from '@mohism/sloty';
 import { Dict } from '@mohism/utils';
 import { white } from 'colors';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
