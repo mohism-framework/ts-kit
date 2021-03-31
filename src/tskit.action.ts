@@ -20,7 +20,7 @@ class TsKit extends ActionBase {
     return 'an awesome typescript kit';
   }
 
-  async run(): Promise<any> {
+  async run(): Promise<void> {
     const testKit = await this.question.confirm('安装测试套件？', true);
     const lintKit = await this.question.confirm('安装 eslint 套件？', true);
     const gitKit = await this.question.confirm('安装 git辅助 套件？', true);

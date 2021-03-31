@@ -1,6 +1,6 @@
 {
   "name": "@mohism/ts-kit",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "an awesome typescript kit",
   "main": "dist/tskit.action.js",
   "scripts": {
@@ -17,9 +17,9 @@
   "author": "lanhao",
   "license": "ISC",
   "dependencies": {
-    "@mohism/sloty": "^1.0.6",
-    "@mohism/utils": "^1.1.3",
-    "shelljs": "^0.8.3"
+    "@mohism/sloty": "^1.3.0",
+    "@mohism/utils": "^1.1.8",
+    "shelljs": "^0.8.4"
   },
   "mohismInit": true,
   "devDependencies": {
