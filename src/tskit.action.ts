@@ -28,7 +28,7 @@ class TsKit extends ActionBase {
     const root: string = process.cwd();
     if (!existsSync(`${root}/package.json`)) {
       if (0 !== exec('npm init --yes', {
-        silent: true,
+        silent: !process.env.DEBUG,
       }).code) {
         this.fatal('Run "npm init" failed.');
       }
@@ -104,7 +104,11 @@ class TsKit extends ActionBase {
 
     if (toInstall.length > 0) {
       this.info('wait for install dependencies ...'.white);
-      if (0 !== exec(`npm i -D ${toInstall}`, { silent: true }).code) {
+      const installList = ['npm', 'yarn', 'pnpm'];
+      const op = { npm: 'install', pnpm: 'install', yarn: 'add' };
+      const installer = (await this.question.select(' Select your installer:', installList)) as 'npm' | 'pnpm' | 'yarn';
+      this.info(`Using ${installer} to install Dependencies`);
+      if (0 !== exec(`${installer} ${op[installer]} -D ${toInstall}`, { silent: !process.env.DEBUG }).code) {
         this.fatal('Dependencies fail to installed, it will finished in few mins');
       }
     }
